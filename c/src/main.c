@@ -1,3 +1,4 @@
+#define DEBUG
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
@@ -68,10 +69,13 @@ int main(int argc, const char **argv) {
 		usage(argv[0]);
 	}
 
+	DBG("");
 	kn_init();
+	DBG("");
 
 	struct kn_value_t ret = kn_run(string);
 
+	DBG("");
 	kn_value_free(&ret);
 
 	return 0;

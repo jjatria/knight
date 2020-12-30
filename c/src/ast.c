@@ -176,9 +176,14 @@ struct kn_ast_t kn_ast_parse(stream_t stream) {
 }
 
 struct kn_value_t kn_ast_run(const struct kn_ast_t *ast) {
+	DBG(">%p", ast);
+	if (ast == 0) { exit(0); }
+	DBG(">%d", ast->kind);
+	struct kn_value_t ret;
 	switch (ast->kind) {
 	case KN_TT_VALUE:
-		return kn_value_clone(&ast->value);
+		ret = kn_value_clone(&ast->value);
+		break;
 
 	case KN_TT_IDENT: {
 		const struct kn_value_t *retptr = kn_env_get(ast->ident);
@@ -187,15 +192,22 @@ struct kn_value_t kn_ast_run(const struct kn_ast_t *ast) {
 			die("unknown identifier '%s'", ast->ident);
 		}
 
-		return kn_value_clone(retptr);
+		ret = kn_value_clone(retptr);
+		break;
 	}
 
 	case KN_TT_FUNCTION:
-		return (ast->function->func)(ast->args);
+		DBG(" %p [%p]", ast->function, kn_fn_fetch('C'));
+		DBG("!%p", ast->function->func);
+		ret = (ast->function->func)(ast->args);
+		break;
 
 	default:
 		bug("unknown kind '%d'");
 	}
+
+	DBG("<%d", ast->kind);
+	return ret;
 }
 
 struct kn_ast_t kn_ast_clone(const struct kn_ast_t *ast) {

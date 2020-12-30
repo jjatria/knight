@@ -138,7 +138,11 @@ struct kn_value_t kn_fn_eval(const struct kn_ast_t *args) {
 }
 
 struct kn_value_t kn_fn_call(const struct kn_ast_t *args) {
+	DBG("kn_fn_call>>(%p)", args);
+	fflush(stdout);
+	DBG("kn_fn_call  (%d, %p, %s)", args[0].kind, args[0].ident, args[0].ident);
 	struct kn_value_t arg = kn_ast_run(&args[0]);
+	DBG("kn_fn_call<<(%p)", args);
 
 	if (arg.kind != KN_VT_AST) {
 		die("Unable to call '%d's; only block ssupported", arg.kind);

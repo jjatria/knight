@@ -6,7 +6,13 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+#define DBG(msg, ...) \
+	do {\
+	printf("%s:%s:%d: " msg "\n", \
+		__FILE__, __FUNCTION__, __LINE__, ##__VA_ARGS__);\
+		fflush(stdout); } while(0)
 #ifdef DEBUG
+
 #define DEBUG_ASSERT(cond, msg, ...) \
 	do { \
 		if (!(cond)) { \
